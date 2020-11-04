@@ -1,0 +1,71 @@
+name: Deploy Infrastructure
+
+
+env:
+
+
+  GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+  GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+
+  CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
+  CONFIGURATION_SERVER_PASSWORD: ${{ secrets.CONFIGURATION_SERVER_PASSWORD }}
+
+  GKE_CLUSTER_NAME_PRODUCTION: ${{ secrets.GKE_CLUSTER_NAME_PRODUCTION }}
+  GKE_CLUSTER_NAME_DEVELOPMENT: ${{ secrets.GKE_CLUSTER_NAME_DEVELOPMENT }}
+
+  GCLOUD_ZONE_DEVELOPMENT: ${{ secrets.GCLOUD_ZONE_DEVELOPMENT }}
+  GCLOUD_PROJECT_DEVELOPMENT: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
+
+
+on:
+  create:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: actions/checkout@v2
+
+      #      what variables do i need bifurcated based on region? I
+      #      I need the GKE cluster information itself
+      #      I need the DB/RMQ passwords also bifurcated
+
+      - name: "Bootstrap Github Actions CI Pipeline environment variables from Spring Cloud Config Server"
+        run: |
+          source $GITHUB_WORKSPACE/.github/workflows/bp_mode.sh
+          source $GITHUB_WORKSPACE/.github/workflows/env.sh
+          resolve_variable_by_mode GCLOUD_ZONE
+          resolve_variable_by_mode GCLOUD_PROJECT
+          resolve_variable_by_mode GKE_CLUSTER_NAME
+
+
+      - name: Setup GCP environment
+        uses: GoogleCloudPlatform/github-actions@0.1.2
+
+      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: '290.0.1'
+          service_account_key: ${{ secrets.GCLOUD_SA_KEY }}
+          project_id: ${{ secrets.GCLOUD_PROJECT }}
+
+      - run: |
+          gcloud --quiet auth configure-docker
+          gcloud config set project $GCLOUD_PROJECT
+
+
+      - run: |
+          gcloud container clusters get-credentials $GKE_CLUSTER_NAME --zone "$GCLOUD_ZONE" --project bootiful
+
+
+      - name: Deploy Spring Cloud Config Server
+        run: |
+          cd $GITHUB_WORKSPACE/deploy
+          export APP_NAME=configuration
+          ./build.sh
+          ./deploy.sh
+
