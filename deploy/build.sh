@@ -8,6 +8,6 @@ mvn -DskipTests=true -f $GITHUB_WORKSPACE/pom.xml clean spring-boot:build-image
 
 image_id=$(docker images -q $APP_NAME)
 
-docker tag "${image_id}" gcr.io/${PROJECT_ID}/${APP_NAME}
+docker tag "${image_id}" gcr.io/${GCLOUD_PROJECT}/${APP_NAME}
 
-docker push gcr.io/${PROJECT_ID}/${APP_NAME}
+docker push gcr.io/${GCLOUD_PROJECT}/${APP_NAME}
