@@ -4,7 +4,7 @@ image_id=$(docker images -q $APP_NAME)
 
 docker rmi -f $image_id || echo "there is not an existing image to delete..."
 
-mvn -DskipTests=true clean spring-boot:build-image
+mvn -DskipTests=true -f $GITHUB_WORKSPACE/pom.xml clean spring-boot:build-image
 
 image_id=$(docker images -q $APP_NAME)
 
