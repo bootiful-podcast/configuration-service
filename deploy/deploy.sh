@@ -6,9 +6,9 @@ APP_YAML=${ROOT_DIR}/deploy/bp-configuration.yaml
 APP_SERVICE_YAML=${ROOT_DIR}/deploy/bp-configuration-service.yaml
 SECRETS=${APP_NAME}-secrets
 
-kubectl delete secrets ${SECRETS} || echo "could not delete ${SECRETS}."
-kubectl delete -f $APP_YAML || echo "could not delete the existing Kubernetes environment as described in ${APP_YAML}."
-kubectl apply -f <(echo "
+kubectl delete -n $BP_MODE_LOWERCASE secrets ${SECRETS} || echo "could not delete ${SECRETS}."
+kubectl delete  -n $BP_MODE_LOWERCASE -f $APP_YAML || echo "could not delete the existing Kubernetes environment as described in ${APP_YAML}."
+kubectl apply -n $BP_MODE_LOWERCASE -f <(echo "
 ---
 apiVersion: v1
 kind: Secret
@@ -23,7 +23,6 @@ stringData:
   SPRING_PROFILES_ACTIVE: cloud
 ")
 
-
 ## todo need some way to parameterize this yaml for the DNS URI
-kubectl apply -f $APP_YAML
-kubectl get service | grep $APP_NAME || kubectl apply -f $APP_SERVICE_YAML
+kubectl apply -n $BP_MODE_LOWERCASE -f $APP_YAML
+kubectl get service -n $BP_MODE_LOWERCASE   | grep $APP_NAME || kubectl apply -f $APP_SERVICE_YAML
