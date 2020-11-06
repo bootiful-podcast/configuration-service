@@ -23,7 +23,6 @@ stringData:
   SPRING_PROFILES_ACTIVE: cloud
 ")
 
-
 ## todo need some way to parameterize this yaml for the DNS URI
 kubectl apply -f $APP_YAML
 kubectl get service | grep $APP_NAME || kubectl apply -f $APP_SERVICE_YAML
