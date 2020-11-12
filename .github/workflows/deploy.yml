@@ -2,7 +2,6 @@ name: Deploy Infrastructure
 
 
 env:
-
   GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
   CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
