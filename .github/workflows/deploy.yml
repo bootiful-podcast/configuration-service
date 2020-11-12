@@ -12,6 +12,10 @@ env:
 
 
 on:
+
+  repository_dispatch:
+    types: deploy-event  
+  
   create:
   push:
     branches: [ main ]
