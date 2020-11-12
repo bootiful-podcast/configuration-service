@@ -10,12 +10,9 @@ env:
   GCLOUD_PROJECT_DEVELOPMENT: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
   GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
 
-
 on:
-
   repository_dispatch:
-    types: deploy-event  
-  
+    types: deploy-event   
   create:
   push:
     branches: [ main ]
