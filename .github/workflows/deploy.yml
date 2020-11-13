@@ -2,7 +2,6 @@ name: Deploy Infrastructure
 
 
 env:
-
   GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
   CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
@@ -11,8 +10,9 @@ env:
   GCLOUD_PROJECT_DEVELOPMENT: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
   GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
 
-
 on:
+  repository_dispatch:
+    types: deploy-event   
   create:
   push:
     branches: [ main ]
