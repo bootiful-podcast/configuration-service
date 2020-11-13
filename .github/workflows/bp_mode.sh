@@ -34,3 +34,6 @@ echo "GCLOUD_PROJECT=$GCLOUD_PROJECT" >> $GITHUB_ENV
 # you could bifurcate by cluster name
 GKE_CLUSTER_NAME=bootiful-podcast-${BP_MODE_LOWERCASE}
 echo "GKE_CLUSTER_NAME=${GKE_CLUSTER_NAME}" >> $GITHUB_ENV
+
+
+env
