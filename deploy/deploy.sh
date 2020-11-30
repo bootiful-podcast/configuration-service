@@ -23,6 +23,6 @@ CONFIGURATION_SERVER_PASSWORD=${CONFIGURATION_SERVER_PASSWORD}
 SPRING_PROFILES_ACTIVE=cloud
 EOF
 
-kubectl apply -k ${OD} --prune --all
+kubectl apply -k ${OD}
 
 rm $SECRETS_FN
