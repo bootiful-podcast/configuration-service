@@ -1,28 +1,34 @@
 #!/usr/bin/env bash
 
-export APP_NAME=${APP_NAME:-configuration}
-ROOT_DIR=$(cd $(dirname $0)/.. && pwd)
-APP_YAML=${ROOT_DIR}/deploy/bp-configuration.yaml
-APP_SERVICE_YAML=${ROOT_DIR}/deploy/bp-configuration-service.yaml
-SECRETS=${APP_NAME}-secrets
+export ROOT_DIR=$(cd $(dirname $0) && pwd)
 
-kubectl delete secrets ${SECRETS} || echo "could not delete ${SECRETS}."
-kubectl delete -f $APP_YAML || echo "could not delete the existing Kubernetes environment as described in ${APP_YAML}."
-kubectl apply -f <(echo "
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: ${SECRETS}
-type: Opaque
-stringData:
-  GIT_PASSWORD: ${GIT_PASSWORD}
-  GIT_USERNAME: ${GIT_USERNAME}
-  CONFIGURATION_SERVER_USERNAME: ${CONFIGURATION_SERVER_USERNAME}
-  CONFIGURATION_SERVER_PASSWORD: ${CONFIGURATION_SERVER_PASSWORD}
-  SPRING_PROFILES_ACTIVE: cloud
-")
 
-## todo need some way to parameterize this yaml for the DNS URI
-kubectl apply -f $APP_YAML
-kubectl get service | grep $APP_NAME || kubectl apply -f $APP_SERVICE_YAML
+export BP_MODE_LOWERCASE=${BP_MODE_LOWERCASE:-development}
+export OD=${ROOT_DIR}/overlays/${BP_MODE_LOWERCASE}
+
+
+export APP_NAME=configuration
+export SECRETS=${APP_NAME}-secrets
+export SECRETS_FN=${OD}/${APP_NAME}-secrets.env
+
+mkdir -p `dirname $SECRETS_FN`
+touch $SECRETS_FN
+
+export RESERVED_IP_NAME=configuration-${BP_MODE_LOWERCASE}-ip
+gcloud compute addresses list --format json | jq '.[].name' -r | grep $RESERVED_IP_NAME || \
+    gcloud compute addresses create $RESERVED_IP_NAME --global
+
+echo writing to "$SECRETS_FN "
+cat <<EOF >${SECRETS_FN}
+GIT_PASSWORD=${GIT_PASSWORD}
+GIT_USERNAME=${GIT_USERNAME}
+CONFIGURATION_SERVER_USERNAME=${CONFIGURATION_SERVER_PASSWORD}
+CONFIGURATION_SERVER_PASSWORD=${CONFIGURATION_SERVER_PASSWORD}
+SPRING_PROFILES_ACTIVE=cloud
+EOF
+
+ls -la $SECRETS_FN && cat $SECRETS_FN
+
+kubectl apply -k ${OD} --prune --all
+
+#rm $SECRETS_FN

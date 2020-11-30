@@ -1,0 +1,15 @@
+---
+resources:
+  - service.yaml
+  - deployment.yaml
+
+
+namespace: development
+
+commonLabels:
+  env: development
+  app: configuration
+
+secretGenerator:
+  - name: configuration-secrets
+    env: configuration-secrets.env
