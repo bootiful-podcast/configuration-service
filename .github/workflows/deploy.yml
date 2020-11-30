@@ -14,10 +14,12 @@ env:
   GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
   GKE_CLUSTER_NAME_PRODUCTION: ${{ secrets.GKE_CLUSTER_NAME_PRODUCTION }}
   GKE_CLUSTER_NAME_DEVELOPMENT: ${{ secrets.GKE_CLUSTER_NAME_DEVELOPMENT }}
+  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
 on:
   repository_dispatch:
-    types: deploy-event   
+    types: [ deploy-production-event, deploy-development-event ]
+
   create:
   push:
     branches: [ main ]
