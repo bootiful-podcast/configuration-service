@@ -5,7 +5,7 @@ export BP_MODE_LOWERCASE=${BP_MODE_LOWERCASE:-development}
 export OD=${ROOT_DIR}/overlays/${BP_MODE_LOWERCASE}
 export APP_NAME=configuration
 export SECRETS=${APP_NAME}-secrets
-export SECRETS_FN=${OD}/${APP_NAME}-secrets.env
+export SECRETS_FN=${ROOT_DIR}/overlays/development/${APP_NAME}-secrets.env
 
 mkdir -p $(dirname $SECRETS_FN)
 touch $SECRETS_FN
