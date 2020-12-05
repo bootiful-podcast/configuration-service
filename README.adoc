@@ -1,0 +1,11 @@
+= The Configuration Server
+
+![API](https://github.com/bootiful-podcast/configuration-service/workflows/API/badge.svg)
+
+== Description
+
+This module is an instance of a Spring Cloud Config Server.
+
+== Technical Notes
+
+This module uses Spring Cloud Config Server to furnish access to configuration files living in http://github.com/bootiful-podcast/configuration[a Github repository]. A Spring Security filter secures access to the Spring Cloud Config Server API.
