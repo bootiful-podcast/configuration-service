@@ -1,6 +1,6 @@
 = The Configuration Server
 
-![API](https://github.com/bootiful-podcast/configuration-service/workflows/API/badge.svg)
+image::https://github.com/bootiful-podcast/configuration-service/workflows/Deploy/badge.svg[Status]
 
 == Description
 
