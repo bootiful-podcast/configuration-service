@@ -7,15 +7,15 @@ env:
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
   BP_MODE_LOWERCASE: production
   BP_MODE : PRODUCTION
-  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
   CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
   CONFIGURATION_SERVER_PASSWORD: ${{ secrets.CONFIGURATION_SERVER_PASSWORD }}
   GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
   CONFIGURATION_SERVER_URI: https://configuration.bootifulpodcast.fm
-  GKE_CLUSTER : joshlong
-  GCLOUD_ZONE : us-east1-b
-  GCLOUD_PROJECT : pgtm-jlong
-  NS_NAME: bootiful-podcast
+  GKE_CLUSTER:  ${secrets.GKE_CLUSTER}
+  GCLOUD_ZONE: ${secrets.GCLOUD_ZONE}
+  GCLOUD_PROJECT: ${secrets.GCLOUD_PROJECT}
+  NS_NAME: ${secrets.NS_NAME}
+  GCLOUD_SA_KEY: ${secrets.GCLOUD_SA_KEY}
 
 on:
   repository_dispatch:
@@ -50,7 +50,7 @@ jobs:
 
       - uses: 'google-github-actions/auth@v0'
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCLOUD_SA_KEY }}'
 
 
       - id: 'get-credentials'
