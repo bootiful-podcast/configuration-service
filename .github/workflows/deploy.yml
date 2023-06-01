@@ -1,5 +1,6 @@
 name: Deploy
 
+
 env:
   APP_NAME: configuration
   GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
