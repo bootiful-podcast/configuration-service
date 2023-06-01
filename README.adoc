@@ -10,4 +10,5 @@ This module is an instance of a Spring Cloud Config Server.
 
 This module uses Spring Cloud Config Server to furnish access to configuration files living in http://github.com/bootiful-podcast/configuration[a Github repository]. A Spring Security filter secures access to the Spring Cloud Config Server API.
 
-This service is locked-down by default with Spring Security and exports observability information with the Spring Boot Actuator.
+This service is locked-down by default with Spring Security and exports limited observability information with the Spring Boot Actuator.
+
