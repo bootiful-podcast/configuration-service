@@ -18,7 +18,7 @@ spec:
         - envFrom:
             - secretRef:
                 name: configuration-secrets
-          image: gcr.io/bootiful/configuration
+          image: gcr.io/pgtm-jlong/configuration
           imagePullPolicy: Always
           name: configuration
           readinessProbe:
