@@ -70,6 +70,5 @@ jobs:
           kubectl config view --minify | grep namespace: && echo "found the namespace.."
 
           cd $GITHUB_WORKSPACE/deploy
-          ./build.sh
           ./deploy.sh
 
