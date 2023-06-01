@@ -22,7 +22,7 @@ spec:
           imagePullPolicy: Always
           name: configuration
           readinessProbe:
-            initialDelaySeconds: 300
+            initialDelaySeconds: 60
             periodSeconds: 30
             httpGet:
               port: 8080
