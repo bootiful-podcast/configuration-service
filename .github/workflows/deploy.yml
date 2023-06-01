@@ -68,7 +68,7 @@ jobs:
           kubectl get ns/$NS_NAME || kubectl create ns $NS_NAME 
           kubectl config set-context --current --namespace=$NS_NAME
           kubectl config view --minify | grep namespace: && echo "found the namespace.."
-
+          export ROOT_DIR=$GITHUB_WORKSPACE
           cd $GITHUB_WORKSPACE/deploy
           ./deploy.sh
 
