@@ -52,6 +52,7 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+
       - id: 'get-credentials'
         uses: 'google-github-actions/get-gke-credentials@v1'
         with:
