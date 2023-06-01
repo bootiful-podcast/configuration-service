@@ -2,10 +2,10 @@
 
 set -e
 set -o pipefail
-
+echo "the project is $GCLOUD_PROJECT "
 export SECRETS=${APP_NAME}-secrets
 export SECRETS_FN=$HOME/${SECRETS}
-export IMAGE_NAME=gcr.io/${PROJECT_ID}/${APP_NAME}
+export IMAGE_NAME=gcr.io/${GCLOUD_PROJECT}/${APP_NAME}
 export RESERVED_IP_NAME=${APP_NAME}-ip
 docker rmi -f $IMAGE_NAME
 cd $ROOT_DIR
