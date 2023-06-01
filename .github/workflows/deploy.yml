@@ -2,19 +2,31 @@ name: Deploy
 
 
 env:
+  APP_NAME: configuration
   GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
   GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
   CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
   CONFIGURATION_SERVER_PASSWORD: ${{ secrets.CONFIGURATION_SERVER_PASSWORD }}
-  GCLOUD_ZONE_DEVELOPMENT: ${{ secrets.GCLOUD_ZONE_DEVELOPMENT }}
-  GCLOUD_ZONE_PRODUCTION: ${{ secrets.GCLOUD_ZONE_DEVELOPMENT }}
-  GCLOUD_PROJECT_DEVELOPMENT: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
-  GCLOUD_PROJECT_PRODUCTION: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
-  GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
   GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
-  GKE_CLUSTER_NAME_PRODUCTION: ${{ secrets.GKE_CLUSTER_NAME_PRODUCTION }}
-  GKE_CLUSTER_NAME_DEVELOPMENT: ${{ secrets.GKE_CLUSTER_NAME_DEVELOPMENT }}
-  ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+  BP_MODE_LOWERCASE: production
+  BP_MODE : PRODUCTION
+  GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+  CONFIGURATION_SERVER_USERNAME: ${{ secrets.CONFIGURATION_SERVER_USERNAME }}
+  CONFIGURATION_SERVER_PASSWORD: ${{ secrets.CONFIGURATION_SERVER_PASSWORD }}
+  GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+  CONFIGURATION_SERVER_URI: https://configuration.bootifulpodcast.fm
+  GKE_CLUSTER : joshlong
+  GCLOUD_ZONE : us-east1-b
+  GCLOUD_PROJECT : pgtm-jlong
+  NS_NAME: bootiful-podcast
+  # GCLOUD_ZONE_DEVELOPMENT: ${{ secrets.GCLOUD_ZONE_DEVELOPMENT }}
+  # GCLOUD_ZONE_PRODUCTION: ${{ secrets.GCLOUD_ZONE_DEVELOPMENT }}
+  # GCLOUD_PROJECT_DEVELOPMENT: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
+  # GCLOUD_PROJECT_PRODUCTION: ${{ secrets.GCLOUD_PROJECT_DEVELOPMENT }}
+  # GCLOUD_SA_KEY: ${{ secrets.GCLOUD_SA_KEY }}
+  # GKE_CLUSTER_NAME_PRODUCTION: ${{ secrets.GKE_CLUSTER_NAME_PRODUCTION }}
+  # GKE_CLUSTER_NAME_DEVELOPMENT: ${{ secrets.GKE_CLUSTER_NAME_DEVELOPMENT }}
+
 
 on:
   repository_dispatch:
@@ -31,48 +43,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - uses: bootiful-podcast/bp-mode-github-action@v34
+      # - uses: bootiful-podcast/bp-mode-github-action@v34
 
-#      - name: "Setup Initial Environment"
-#        run: |
-#          source $GITHUB_WORKSPACE/.github/workflows/bp_mode.sh
-
-      - name: Set up JDK 15
-        uses: actions/setup-java@v1
+      - uses: actions/setup-java@v3
         with:
-          java-version: 15
+          distribution: 'adopt'
+          java-version: 17
 
-      - name: Setup GCP environment
-        uses: GoogleCloudPlatform/github-actions@0.1.2
-
-      - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - uses: 'google-github-actions/auth@v0'
         with:
-          version: '290.0.1'
-          service_account_key: ${{ secrets.GCLOUD_SA_KEY }}
-          project_id: ${{ env.GCLOUD_PROJECT }}
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - run: |-
-          gcloud config set project $GCLOUD_PROJECT
-          gcloud --quiet auth configure-docker
-
+      - id: 'get-credentials'
+        uses: 'google-github-actions/get-gke-credentials@v1'
+        with:
+          cluster_name: '${{ env.GKE_CLUSTER  }}'
+          location: '${{ env.GCLOUD_ZONE }}'
 
       - run: |
-          gcloud container clusters get-credentials $GKE_CLUSTER_NAME --zone "$GCLOUD_ZONE" --project $GCLOUD_PROJECT
-
+          gcloud config set project $GCLOUD_PROJECT 
+          gcloud --quiet auth configure-docker
+          kubectl get pods
 
       - name: Deploy Spring Cloud Config Server
         run: |
+          kubectl get ns/$NS_NAME || kubectl create ns $NS_NAME 
+          kubectl config set-context --current --namespace=$NS_NAME
+          kubectl config view --minify | grep namespace: && echo "found the namespace.."
+
           cd $GITHUB_WORKSPACE/deploy
-          export APP_NAME=configuration
           ./build.sh
           ./deploy.sh
 

@@ -3,7 +3,6 @@
 export ROOT_DIR=$(cd $(dirname $0) && pwd)
 export BP_MODE_LOWERCASE=${BP_MODE_LOWERCASE:-development}
 export OD=${ROOT_DIR}/overlays/${BP_MODE_LOWERCASE}
-export APP_NAME=configuration
 export SECRETS=${APP_NAME}-secrets
 export SECRETS_FN=${ROOT_DIR}/overlays/development/${APP_NAME}-secrets.env
 
