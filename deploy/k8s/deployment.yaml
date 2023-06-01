@@ -21,6 +21,13 @@ spec:
           image: gcr.io/pgtm-jlong/configuration
           imagePullPolicy: Always
           name: configuration
+
+          resources:
+            requests:
+              memory: "1000Mi"
+            limits:
+              memory: "2000Mi"
+
           readinessProbe:
             initialDelaySeconds: 120
             periodSeconds: 60
