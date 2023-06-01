@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+    networking.gke.io/managed-certificates: "configuration-certificate"
+    kubernetes.io/ingress.global-static-ip-name: "configuration-ip"
+  name: configuration-ingress
+spec:
+  defaultBackend:
+    service:
+      name: configuration
+      port:
+        number: 80
