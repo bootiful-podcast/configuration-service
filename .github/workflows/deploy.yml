@@ -11,11 +11,11 @@ env:
   CONFIGURATION_SERVER_PASSWORD: ${{ secrets.CONFIGURATION_SERVER_PASSWORD }}
   GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
   CONFIGURATION_SERVER_URI: https://configuration.bootifulpodcast.fm
-  GKE_CLUSTER:  ${secrets.GKE_CLUSTER}
-  GCLOUD_ZONE: ${secrets.GCLOUD_ZONE}
-  GCLOUD_PROJECT: ${secrets.GCLOUD_PROJECT}
-  NS_NAME: ${secrets.NS_NAME}
-  GCLOUD_SA_KEY: ${secrets.GCLOUD_SA_KEY}
+  GKE_CLUSTER:   ${{ secrets.GKE_CLUSTER}}
+  GCLOUD_ZONE:  ${{ secrets.GCLOUD_ZONE}}
+  GCLOUD_PROJECT:  ${{ secrets.GCLOUD_PROJECT}}
+  NS_NAME:  ${{ secrets.NS_NAME}}
+  GCLOUD_SA_KEY:  ${{ secrets.GCLOUD_SA_KEY}}
 
 on:
   repository_dispatch:
