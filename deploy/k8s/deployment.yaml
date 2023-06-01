@@ -22,8 +22,8 @@ spec:
           imagePullPolicy: Always
           name: configuration
           readinessProbe:
-            initialDelaySeconds: 60
-            periodSeconds: 30
+            initialDelaySeconds: 120
+            periodSeconds: 60
             httpGet:
               port: 8080
               path: /actuator/health/readiness
