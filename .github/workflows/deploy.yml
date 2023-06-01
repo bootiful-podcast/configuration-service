@@ -12,7 +12,6 @@ env:
   CONFIGURATION_SERVER_URI: https://configuration.bootifulpodcast.fm
   GKE_CLUSTER:   ${{ secrets.GKE_CLUSTER }}
   GCLOUD_ZONE:  ${{ secrets.GCLOUD_ZONE }}
-  GCLOUD_PROJECT:  ${{ secrets.GCLOUD_PROJECT }}
   NS_NAME:  ${{ secrets.NS_NAME }}
   GCLOUD_SA_KEY:  ${{ secrets.GCLOUD_SA_KEY }}
 
