@@ -4,7 +4,7 @@ metadata:
   annotations:
     ingress.kubernetes.io/force-ssl-redirect: "true"
     networking.gke.io/managed-certificates: "configuration-certificate"
-    kubernetes.io/ingress.global-static-ip-name: "configuration-ip"
+    kubernetes.io/ingress.global-static-ip-name: "bootiful-podcast-configuration-ip"
   name: configuration-ingress
 spec:
   defaultBackend:
