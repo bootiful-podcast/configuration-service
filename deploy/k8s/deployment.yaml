@@ -23,10 +23,10 @@ spec:
           name: configuration
 
           resources:
-            requests:
-              memory: "2000Mi"
             limits:
-              memory: "2000Mi"
+              memory: "2Gi"
+            requests:
+              memory: "2Gi"
 
           readinessProbe:
             initialDelaySeconds: 120
