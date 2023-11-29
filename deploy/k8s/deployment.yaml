@@ -18,7 +18,7 @@ spec:
         - envFrom:
             - secretRef:
                 name: configuration-secrets
-          image: gcr.io/pgtm-jlong/configuration
+          image: gcr.io/joshlong/configuration
           imagePullPolicy: Always
           name: configuration
 
